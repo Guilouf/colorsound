@@ -5,6 +5,8 @@ Takes a kernel and the current image pixel as input,
 returns a kernel
 */
 uniform vec2  iResolution;
+uniform sampler2D iChannel0;
+uniform sampler2D iChannel1;
 
 vec2 move(vec2 uv, vec2 xy) {
 	return uv + xy / iResolution.xy;
@@ -23,7 +25,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	vec4 right = texture(iChannel1, move(uv, vec2(-1,0)));
     vec4 down = texture(iChannel1, move(uv, vec2(0,1)));
     vec4 up = texture(iChannel1, move(uv, vec2(0,-1)));
-
 
     fragColor.a += (center.r - left.r);
     fragColor.r += (center.r - right.r);

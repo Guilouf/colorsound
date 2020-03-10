@@ -4,6 +4,10 @@ Image buffer
 Takes previous image and kernel as input,
 returns a new image
 */
+uniform vec2  iMouse;
+uniform vec2  iResolution;
+uniform sampler2D iChannel0;
+uniform sampler2D iChannel1;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {  
