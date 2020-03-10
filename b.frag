@@ -8,11 +8,12 @@ uniform vec2  iMouse;
 uniform vec2  iResolution;
 uniform sampler2D iChannel0;
 uniform sampler2D iChannel1;
+out vec4 fragColor;
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
+void main()
 {  
-	vec2 uv = fragCoord.xy / iResolution.xy;
-    ivec2 ifragCoord = ivec2(fragCoord);
+	vec2 uv = gl_FragCoord.xy / iResolution.xy;
+    ivec2 ifragCoord = ivec2(gl_FragCoord);
     ivec2 intMouse = ivec2(iMouse.xy);
     
     vec4 draw = texture(iChannel0, uv);

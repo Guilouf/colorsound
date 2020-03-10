@@ -7,15 +7,16 @@ returns a kernel
 uniform vec2  iResolution;
 uniform sampler2D iChannel0;
 uniform sampler2D iChannel1;
+out vec4 fragColor;
 
 vec2 move(vec2 uv, vec2 xy) {
 	return uv + xy / iResolution.xy;
 }
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
+void main()
 {
 
-    vec2 uv = fragCoord / iResolution.xy;
+    vec2 uv = gl_FragCoord.xy / iResolution.xy;
     vec4 prevK = texture(iChannel0, uv); //previous kernel
     fragColor = prevK;
 
