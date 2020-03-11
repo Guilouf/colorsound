@@ -52,11 +52,16 @@ class ColorSound:
         # créations des programmes
         self.display_prog = gl_shaders.compileProgram(display_sh)
         self.a_prog = gl_shaders.compileProgram(a_sh)
-        b_prog = gl_shaders.compileProgram(b_sh)
+        self.b_prog = gl_shaders.compileProgram(b_sh)
 
         # on envoit les uniforms
         glUseProgram(self.display_prog)
         glUniform2f(glGetUniformLocation(self.display_prog, 'iResolution'), *self.resolution)
+        glUseProgram(self.a_prog)
+        glUniform2f(glGetUniformLocation(self.a_prog, 'iResolution'), *self.resolution)
+        glUseProgram(self.b_prog)
+        glUniform2f(glGetUniformLocation(self.b_prog, 'iResolution'), *self.resolution)
+        self.uni_mouse = glGetUniformLocation(self.b_prog, 'iMouse')
 
         ##################
         # Vertex buffers #
@@ -77,9 +82,9 @@ class ColorSound:
         # Framebuffers #
         ################
 
-        texture_a = glGenTextures(1)
+        self.texture_a = glGenTextures(1)
         glActiveTexture(GL_TEXTURE0)
-        glBindTexture(GL_TEXTURE_2D, texture_a)
+        glBindTexture(GL_TEXTURE_2D, self.texture_a)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, *self.resolution, 0, GL_RGB, GL_UNSIGNED_BYTE, None)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)  # nearest ?
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
@@ -87,7 +92,19 @@ class ColorSound:
 
         self.a_fb = glGenFramebuffers(1)
         glBindFramebuffer(GL_FRAMEBUFFER, self.a_fb)
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_a, 0)
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self.texture_a, 0)
+
+        self.texture_b = glGenTextures(1)
+        glActiveTexture(GL_TEXTURE0 + 1)  # num texture
+        glBindTexture(GL_TEXTURE_2D, self.texture_b)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, *self.resolution, 0, GL_RGB, GL_UNSIGNED_BYTE, None)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)  # nearest ?
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        # mipmap ?
+
+        self.b_fb = glGenFramebuffers(1)
+        glBindFramebuffer(GL_FRAMEBUFFER, self.b_fb)
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self.texture_b, 0)
 
         self.clock = pygame.time.Clock()
 
@@ -100,12 +117,36 @@ class ColorSound:
                     pygame.quit()
                     exitsystem()
 
+            iChannel0 = glGetUniformLocation(self.a_prog, "iChannel0")
+            iChannel1 = glGetUniformLocation(self.a_prog, "iChannel1")
+
+            glActiveTexture(GL_TEXTURE0)
+            # glBindTexture(GL_TEXTURE_2D, self.texture_a)
             glBindFramebuffer(GL_FRAMEBUFFER, self.a_fb)
             glUseProgram(self.a_prog)
+            glUniform1i(iChannel0, 0)
+            glUniform1i(iChannel1, 1)
             glDrawArrays(GL_QUADS, 0, 4)
+
+            iChannel0 = glGetUniformLocation(self.b_prog, "iChannel0")
+            iChannel1 = glGetUniformLocation(self.b_prog, "iChannel1")
+
+            glActiveTexture(GL_TEXTURE0 + 1)
+            # glBindTexture(GL_TEXTURE_2D, self.texture_b)
+            glBindFramebuffer(GL_FRAMEBUFFER, self.b_fb)
+            glUseProgram(self.b_prog)
+            glUniform1i(iChannel0, 0)
+            glUniform1i(iChannel1, 1)
+            glUniform2f(self.uni_mouse, *pygame.mouse.get_pos())
+            glDrawArrays(GL_QUADS, 0, 4)
+
+            iChannel0 = glGetUniformLocation(self.display_prog, "iChannel0")
+            iChannel1 = glGetUniformLocation(self.display_prog, "iChannel1")
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
             glUseProgram(self.display_prog)
+            glUniform1i(iChannel0, 0)
+            glUniform1i(iChannel1, 1)
             glDrawArrays(GL_QUADS, 0, 4)
 
             pygame.display.flip()  # Update the full display Surface to the screen
