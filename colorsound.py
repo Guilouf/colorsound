@@ -58,6 +58,20 @@ class ColorSound:
         glUseProgram(display_prog)
         glUniform2f(glGetUniformLocation(display_prog, 'iResolution'), *self.resolution)
 
+        ##################
+        # Vertex buffers #
+        ##################
+
+        self.vertex_buffer = glGenBuffers(1)
+        glBindBuffer(GL_ARRAY_BUFFER, self.vertex_buffer)
+        vertices = np.array([-1.0, -1.0, 0.0,
+                             1.0, -1.0, 0.0,
+                             1.0, 1.0, 0.0,
+                             -1.0, 1.0, 0.0], dtype='float32')  # 4 triangles, fullscreen
+        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW)
+
+        glEnableVertexAttribArray(0)  # pointer
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, None)
 
 
 if __name__ == '__main__':
