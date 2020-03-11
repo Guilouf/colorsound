@@ -44,7 +44,7 @@ class ColorSound:
         ###################################################
 
         # compilation des shaders
-        vx_sh = gl_shaders.compileShader(VERTEX_SHADER_IM, GL_VERTEX_SHADER)
+        gl_shaders.compileShader(VERTEX_SHADER_IM, GL_VERTEX_SHADER)
         display_sh = gl_shaders.compileShader(FRAGMENT_SHADER_IM, GL_FRAGMENT_SHADER)
         a_sh = gl_shaders.compileShader(FRAGMENT_SHADER_A, GL_FRAGMENT_SHADER)
         b_sh = gl_shaders.compileShader(FRAGMENT_SHADER_B, GL_FRAGMENT_SHADER)
@@ -56,7 +56,7 @@ class ColorSound:
 
         # on envoit les uniforms
         glUseProgram(display_prog)
-        # glUniform2f(glGetUniformLocation(display_sh, 'iResolution'), *self.resolution)
+        glUniform2f(glGetUniformLocation(display_prog, 'iResolution'), *self.resolution)
 
 
 
