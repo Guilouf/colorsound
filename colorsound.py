@@ -51,7 +51,7 @@ class ColorSound:
 
         # créations des programmes
         self.display_prog = gl_shaders.compileProgram(display_sh)
-        a_prog = gl_shaders.compileProgram(a_sh)
+        self.a_prog = gl_shaders.compileProgram(a_sh)
         b_prog = gl_shaders.compileProgram(b_sh)
 
         # on envoit les uniforms
@@ -73,16 +73,36 @@ class ColorSound:
         glEnableVertexAttribArray(0)  # pointer
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, None)
 
+        ################
+        # Framebuffers #
+        ################
+
+        texture_a = glGenTextures(1)
+        glActiveTexture(GL_TEXTURE0)
+        glBindTexture(GL_TEXTURE_2D, texture_a)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, *self.resolution, 0, GL_RGB, GL_UNSIGNED_BYTE, None)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)  # nearest ?
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        # mipmap ?
+
+        self.a_fb = glGenFramebuffers(1)
+        glBindFramebuffer(GL_FRAMEBUFFER, self.a_fb)
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_a, 0)
+
         self.clock = pygame.time.Clock()
 
     def mainloop(self):
         while 1:
-            delta = self.clock.tick(60)  # cap fps
+            self.clock.tick(60)  # cap fps
 
             for event in pygame.event.get():
                 if (event.type == QUIT) or (event.type == KEYUP and event.key == K_ESCAPE):
                     pygame.quit()
                     exitsystem()
+
+            glBindFramebuffer(GL_FRAMEBUFFER, self.a_fb)
+            glUseProgram(self.a_prog)
+            glDrawArrays(GL_QUADS, 0, 4)
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
             glUseProgram(self.display_prog)
