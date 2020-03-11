@@ -50,13 +50,13 @@ class ColorSound:
         b_sh = gl_shaders.compileShader(FRAGMENT_SHADER_B, GL_FRAGMENT_SHADER)
 
         # créations des programmes
-        display_prog = gl_shaders.compileProgram(display_sh)
+        self.display_prog = gl_shaders.compileProgram(display_sh)
         a_prog = gl_shaders.compileProgram(a_sh)
         b_prog = gl_shaders.compileProgram(b_sh)
 
         # on envoit les uniforms
-        glUseProgram(display_prog)
-        glUniform2f(glGetUniformLocation(display_prog, 'iResolution'), *self.resolution)
+        glUseProgram(self.display_prog)
+        glUniform2f(glGetUniformLocation(self.display_prog, 'iResolution'), *self.resolution)
 
         ##################
         # Vertex buffers #
@@ -73,6 +73,23 @@ class ColorSound:
         glEnableVertexAttribArray(0)  # pointer
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, None)
 
+        self.clock = pygame.time.Clock()
+
+    def mainloop(self):
+        while 1:
+            delta = self.clock.tick(60)  # cap fps
+
+            for event in pygame.event.get():
+                if (event.type == QUIT) or (event.type == KEYUP and event.key == K_ESCAPE):
+                    pygame.quit()
+                    exitsystem()
+
+            glBindFramebuffer(GL_FRAMEBUFFER, 0)
+            glUseProgram(self.display_prog)
+            glDrawArrays(GL_QUADS, 0, 4)
+
+            pygame.display.flip()  # Update the full display Surface to the screen
+
 
 if __name__ == '__main__':
-    ColorSound()
+    ColorSound().mainloop()
