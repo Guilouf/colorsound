@@ -110,7 +110,7 @@ class ColorSound:
 
     def mainloop(self):
         while 1:
-            self.clock.tick(60)  # cap fps
+            self.clock.tick(120)  # cap fps
 
             for event in pygame.event.get():
                 if (event.type == QUIT) or (event.type == KEYUP and event.key == K_ESCAPE):
@@ -148,6 +148,7 @@ class ColorSound:
             glUniform1i(channel_b, self.texture_b)
             glDrawArrays(GL_QUADS, 0, 4)
 
+            pygame.display.set_caption(f"FPS: {self.clock.get_fps():.0f}")
             pygame.display.flip()  # Update the full display Surface to the screen
 
 
