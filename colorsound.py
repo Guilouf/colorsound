@@ -117,35 +117,35 @@ class ColorSound:
                     pygame.quit()
                     exitsystem()
 
-            iChannel0 = glGetUniformLocation(self.a_prog, "iChannel0")
-            iChannel1 = glGetUniformLocation(self.a_prog, "iChannel1")
+            channel_a = glGetUniformLocation(self.a_prog, "iChannel0")
+            channel_b = glGetUniformLocation(self.a_prog, "iChannel1")
 
             glActiveTexture(GL_TEXTURE0 + 1)
             glBindFramebuffer(GL_FRAMEBUFFER, self.a_fb)
             glUseProgram(self.a_prog)
-            glUniform1i(iChannel0, 0)
-            glUniform1i(iChannel1, 1)
+            glUniform1i(channel_a, self.texture_a)
+            glUniform1i(channel_b, self.texture_b)
             glDrawArrays(GL_QUADS, 0, 4)
 
-            iChannel0 = glGetUniformLocation(self.b_prog, "iChannel0")
-            iChannel1 = glGetUniformLocation(self.b_prog, "iChannel1")
+            channel_a = glGetUniformLocation(self.b_prog, "iChannel0")
+            channel_b = glGetUniformLocation(self.b_prog, "iChannel1")
 
             glActiveTexture(GL_TEXTURE0 + 2)
             glBindFramebuffer(GL_FRAMEBUFFER, self.b_fb)
             glUseProgram(self.b_prog)
-            glUniform1i(iChannel0, 0)
-            glUniform1i(iChannel1, 1)
+            glUniform1i(channel_a, self.texture_a)
+            glUniform1i(channel_b, self.texture_b)
             glUniform2f(self.uni_mouse, *pygame.mouse.get_pos())
             glDrawArrays(GL_QUADS, 0, 4)
 
-            iChannel0 = glGetUniformLocation(self.display_prog, "iChannel0")
-            iChannel1 = glGetUniformLocation(self.display_prog, "iChannel1")
+            channel_a = glGetUniformLocation(self.display_prog, "iChannel0")
+            channel_b = glGetUniformLocation(self.display_prog, "iChannel1")
 
             glActiveTexture(GL_TEXTURE0)
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
             glUseProgram(self.display_prog)
-            glUniform1i(iChannel0, 0)
-            glUniform1i(iChannel1, 1)
+            glUniform1i(channel_a, self.texture_a)
+            glUniform1i(channel_b, self.texture_b)
             glDrawArrays(GL_QUADS, 0, 4)
 
             pygame.display.flip()  # Update the full display Surface to the screen
