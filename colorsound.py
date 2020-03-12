@@ -1,12 +1,8 @@
-"""
-https://jameshfisher.com/2017/10/22/webgl-game-of-life/
-"""
-
 import pygame
 from pygame.locals import DOUBLEBUF, OPENGL, QUIT, KEYUP, K_ESCAPE
 
 from OpenGL.GL import *
-from OpenGL.GL import shaders as gl_shaders # wrapper de plusieurs methodes
+from OpenGL.GL import shaders as gl_shaders  # wrapper
 
 from sys import exit as exitsystem
 
@@ -40,22 +36,22 @@ class ColorSound:
         # self.resolution = 3840, 2160
         pygame.display.set_mode(self.resolution, DOUBLEBUF | OPENGL)
 
-        ###################################################
-        # Créations shaders et programs ( vertex + frag ) #
-        ###################################################
+        #################################################
+        # Create shaders and programs ( vertex + frag ) #
+        #################################################
 
-        # compilation des shaders
+        # shaders compilation
         gl_shaders.compileShader(VERTEX_SHADER_IM, GL_VERTEX_SHADER)
         display_sh = gl_shaders.compileShader(FRAGMENT_SHADER_IM, GL_FRAGMENT_SHADER)
         a_sh = gl_shaders.compileShader(FRAGMENT_SHADER_A, GL_FRAGMENT_SHADER)
         b_sh = gl_shaders.compileShader(FRAGMENT_SHADER_B, GL_FRAGMENT_SHADER)
 
-        # créations des programmes
+        # programs creation
         self.display_prog = gl_shaders.compileProgram(display_sh)
         self.a_prog = gl_shaders.compileProgram(a_sh)
         self.b_prog = gl_shaders.compileProgram(b_sh)
 
-        # on envoit les uniforms
+        # get and send uniforms
         glUseProgram(self.display_prog)
         glUniform2f(glGetUniformLocation(self.display_prog, 'iResolution'), *self.resolution)
         glUseProgram(self.a_prog)
@@ -100,7 +96,7 @@ class ColorSound:
         glActiveTexture(GL_TEXTURE0 + 2)  # num texture
         glBindTexture(GL_TEXTURE_2D, self.texture_b)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, None)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)  # nearest ?
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 
         self.b_fb = glGenFramebuffers(1)
