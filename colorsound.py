@@ -83,24 +83,24 @@ class ColorSound:
         ################
 
         self.texture_a = glGenTextures(1)
-        glActiveTexture(GL_TEXTURE0)
+        glActiveTexture(GL_TEXTURE0 + 1)
         glBindTexture(GL_TEXTURE_2D, self.texture_a)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, *self.resolution, 0, GL_RGB, GL_UNSIGNED_BYTE, None)
+        # with GL_RGBA16F, light artifacts
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, None)
+        # important: store negative values
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)  # nearest ?
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        # mipmap ?
 
         self.a_fb = glGenFramebuffers(1)
         glBindFramebuffer(GL_FRAMEBUFFER, self.a_fb)
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self.texture_a, 0)
 
         self.texture_b = glGenTextures(1)
-        glActiveTexture(GL_TEXTURE0 + 1)  # num texture
+        glActiveTexture(GL_TEXTURE0 + 2)  # num texture
         glBindTexture(GL_TEXTURE_2D, self.texture_b)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, *self.resolution, 0, GL_RGB, GL_UNSIGNED_BYTE, None)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, None)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)  # nearest ?
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        # mipmap ?
 
         self.b_fb = glGenFramebuffers(1)
         glBindFramebuffer(GL_FRAMEBUFFER, self.b_fb)
