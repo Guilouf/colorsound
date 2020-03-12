@@ -19,8 +19,8 @@ void main()
     vec4 draw = texture(iChannel0, uv);
     vec4 kernel = texture(iChannel1, uv);
     
-    if (ifragCoord.x == intMouse.x && ifragCoord.y == intMouse.y)  {
-        draw = vec4(1,1,1,1);  // white
+    if (ifragCoord.x == intMouse.x && ifragCoord.y == iResolution.y - intMouse.y)  {
+        draw = vec4(1.,1.,1.,1.);  // white
     } 
 
     float sum = 0.;
