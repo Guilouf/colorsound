@@ -16,8 +16,8 @@ void main()
     ivec2 ifragCoord = ivec2(gl_FragCoord);
     ivec2 intMouse = ivec2(iMouse.xy);
     
-    vec4 draw = texture(iChannel0, uv);
-    vec4 kernel = texture(iChannel1, uv);
+    vec4 kernel = texture(iChannel0, uv);
+    vec4 draw = texture(iChannel1, uv);
     
     if (ifragCoord.x == intMouse.x && ifragCoord.y == iResolution.y - intMouse.y)  {
         draw = vec4(1.,1.,1.,1.);  // white
