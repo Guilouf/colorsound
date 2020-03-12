@@ -36,7 +36,8 @@ class ColorSound:
 
     def __init__(self):
         pygame.init()
-        self.resolution = 800, 600
+        self.resolution = 1920, 1080
+        # self.resolution = 3840, 2160
         pygame.display.set_mode(self.resolution, DOUBLEBUF | OPENGL)
 
         ###################################################
