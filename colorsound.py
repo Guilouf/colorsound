@@ -120,8 +120,7 @@ class ColorSound:
             iChannel0 = glGetUniformLocation(self.a_prog, "iChannel0")
             iChannel1 = glGetUniformLocation(self.a_prog, "iChannel1")
 
-            glActiveTexture(GL_TEXTURE0)
-            # glBindTexture(GL_TEXTURE_2D, self.texture_a)
+            glActiveTexture(GL_TEXTURE0 + 1)
             glBindFramebuffer(GL_FRAMEBUFFER, self.a_fb)
             glUseProgram(self.a_prog)
             glUniform1i(iChannel0, 0)
@@ -131,8 +130,7 @@ class ColorSound:
             iChannel0 = glGetUniformLocation(self.b_prog, "iChannel0")
             iChannel1 = glGetUniformLocation(self.b_prog, "iChannel1")
 
-            glActiveTexture(GL_TEXTURE0 + 1)
-            # glBindTexture(GL_TEXTURE_2D, self.texture_b)
+            glActiveTexture(GL_TEXTURE0 + 2)
             glBindFramebuffer(GL_FRAMEBUFFER, self.b_fb)
             glUseProgram(self.b_prog)
             glUniform1i(iChannel0, 0)
@@ -143,6 +141,7 @@ class ColorSound:
             iChannel0 = glGetUniformLocation(self.display_prog, "iChannel0")
             iChannel1 = glGetUniformLocation(self.display_prog, "iChannel1")
 
+            glActiveTexture(GL_TEXTURE0)
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
             glUseProgram(self.display_prog)
             glUniform1i(iChannel0, 0)
