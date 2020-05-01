@@ -6,6 +6,7 @@ in python + openGL
 
 ## Installation
 `pip install -r requirements.txt`, then execute `colorsound.py`
+>  If troubles in Linux, `sudo apt install python3-pygame`
 
 ## Usage
 Just over the window with your mouse !
