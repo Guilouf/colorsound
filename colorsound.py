@@ -54,11 +54,17 @@ class ColorSound:
         # get and send uniforms
         glUseProgram(self.display_prog)
         glUniform2f(glGetUniformLocation(self.display_prog, 'iResolution'), *self.resolution)
+        self.display_channel_a = glGetUniformLocation(self.display_prog, "iChannel0")
+        self.display_channel_b = glGetUniformLocation(self.display_prog, "iChannel1")
         glUseProgram(self.a_prog)
         glUniform2f(glGetUniformLocation(self.a_prog, 'iResolution'), *self.resolution)
+        self.a_prog_channel_a = glGetUniformLocation(self.a_prog, "iChannel0")
+        self.a_prog_channel_b = glGetUniformLocation(self.a_prog, "iChannel1")
         glUseProgram(self.b_prog)
         glUniform2f(glGetUniformLocation(self.b_prog, 'iResolution'), *self.resolution)
         self.uni_mouse = glGetUniformLocation(self.b_prog, 'iMouse')
+        self.b_prog_channel_a = glGetUniformLocation(self.b_prog, "iChannel0")
+        self.b_prog_channel_b = glGetUniformLocation(self.b_prog, "iChannel1")
 
         ##################
         # Vertex buffers #
@@ -114,32 +120,23 @@ class ColorSound:
                     pygame.quit()
                     exitsystem()
 
-            channel_a = glGetUniformLocation(self.a_prog, "iChannel0")
-            channel_b = glGetUniformLocation(self.a_prog, "iChannel1")
-
             glBindFramebuffer(GL_FRAMEBUFFER, self.a_fb)
             glUseProgram(self.a_prog)
-            glUniform1i(channel_a, self.texture_a)
-            glUniform1i(channel_b, self.texture_b)
+            glUniform1i(self.a_prog_channel_a, self.texture_a)
+            glUniform1i(self.a_prog_channel_b, self.texture_b)
             glDrawArrays(GL_QUADS, 0, 4)
-
-            channel_a = glGetUniformLocation(self.b_prog, "iChannel0")
-            channel_b = glGetUniformLocation(self.b_prog, "iChannel1")
 
             glBindFramebuffer(GL_FRAMEBUFFER, self.b_fb)
             glUseProgram(self.b_prog)
-            glUniform1i(channel_a, self.texture_a)
-            glUniform1i(channel_b, self.texture_b)
+            glUniform1i(self.b_prog_channel_a, self.texture_a)
+            glUniform1i(self.b_prog_channel_b, self.texture_b)
             glUniform2f(self.uni_mouse, *pygame.mouse.get_pos())
             glDrawArrays(GL_QUADS, 0, 4)
 
-            channel_a = glGetUniformLocation(self.display_prog, "iChannel0")
-            channel_b = glGetUniformLocation(self.display_prog, "iChannel1")
-
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
             glUseProgram(self.display_prog)
-            glUniform1i(channel_a, self.texture_a)
-            glUniform1i(channel_b, self.texture_b)
+            glUniform1i(self.display_channel_a, self.texture_a)
+            glUniform1i(self.display_channel_b, self.texture_b)
             glDrawArrays(GL_QUADS, 0, 4)
 
             pygame.display.set_caption(f"FPS: {self.clock.get_fps():.0f}")
