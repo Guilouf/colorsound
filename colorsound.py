@@ -80,7 +80,7 @@ class ColorSound:
         ################
 
         self.texture_a = glGenTextures(1)
-        glActiveTexture(GL_TEXTURE0 + 1)
+        glActiveTexture(GL_TEXTURE1)
         glBindTexture(GL_TEXTURE_2D, self.texture_a)
         # with GL_RGBA16F, light artifacts
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, None)
@@ -93,7 +93,7 @@ class ColorSound:
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self.texture_a, 0)
 
         self.texture_b = glGenTextures(1)
-        glActiveTexture(GL_TEXTURE0 + 2)  # num texture
+        glActiveTexture(GL_TEXTURE2)
         glBindTexture(GL_TEXTURE_2D, self.texture_b)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, None)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
@@ -117,7 +117,6 @@ class ColorSound:
             channel_a = glGetUniformLocation(self.a_prog, "iChannel0")
             channel_b = glGetUniformLocation(self.a_prog, "iChannel1")
 
-            glActiveTexture(GL_TEXTURE0 + 1)
             glBindFramebuffer(GL_FRAMEBUFFER, self.a_fb)
             glUseProgram(self.a_prog)
             glUniform1i(channel_a, self.texture_a)
@@ -127,7 +126,6 @@ class ColorSound:
             channel_a = glGetUniformLocation(self.b_prog, "iChannel0")
             channel_b = glGetUniformLocation(self.b_prog, "iChannel1")
 
-            glActiveTexture(GL_TEXTURE0 + 2)
             glBindFramebuffer(GL_FRAMEBUFFER, self.b_fb)
             glUseProgram(self.b_prog)
             glUniform1i(channel_a, self.texture_a)
@@ -138,7 +136,6 @@ class ColorSound:
             channel_a = glGetUniformLocation(self.display_prog, "iChannel0")
             channel_b = glGetUniformLocation(self.display_prog, "iChannel1")
 
-            glActiveTexture(GL_TEXTURE0)
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
             glUseProgram(self.display_prog)
             glUniform1i(channel_a, self.texture_a)
