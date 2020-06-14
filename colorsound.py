@@ -32,8 +32,14 @@ class ColorSound:
 
     def __init__(self):
         pygame.init()
-        self.resolution = 1920, 1080
-        # self.resolution = 3840, 2160
+
+        texture_surface = pygame.image.load('textures/map.png')  # bmp not working
+        start_state_img = pygame.image.tostring(texture_surface, "RGBA", 1)
+        self.texture_resolution = texture_surface.get_width(), texture_surface.get_height()
+
+        self.resolution = self.texture_resolution
+
+
         pygame.display.set_mode(self.resolution, DOUBLEBUF | OPENGL)
 
         #################################################
@@ -89,7 +95,7 @@ class ColorSound:
         glActiveTexture(GL_TEXTURE1)
         glBindTexture(GL_TEXTURE_2D, self.texture_a)
         # with GL_RGBA16F, light artifacts
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, None)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, start_state_img)
         # important: store negative values
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)  # nearest ?
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
@@ -101,7 +107,7 @@ class ColorSound:
         self.texture_b = glGenTextures(1)
         glActiveTexture(GL_TEXTURE2)
         glBindTexture(GL_TEXTURE_2D, self.texture_b)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, None)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, start_state_img)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 
