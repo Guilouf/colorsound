@@ -20,7 +20,7 @@ void main()
     vec4 prevK = texture(kernelTexture, uv); //previous kernel
     fragColor = prevK;
 
-    //previous pixels
+    //previous pixels, we could use only vec2
     vec4 center = texture(iChannel1, uv);
     vec4 left = texture(iChannel1, move(uv, vec2(1,0)));
 	vec4 right = texture(iChannel1, move(uv, vec2(-1,0)));

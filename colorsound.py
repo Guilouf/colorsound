@@ -101,7 +101,7 @@ class ColorSound:
         self.texture_b = glGenTextures(1)
         glActiveTexture(GL_TEXTURE2)
         glBindTexture(GL_TEXTURE_2D, self.texture_b)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, None)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RG32F, *self.resolution, 0, GL_RG, GL_BYTE, None)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 

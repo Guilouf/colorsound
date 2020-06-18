@@ -8,7 +8,7 @@ uniform vec2  iMouse;
 uniform vec2  iResolution;
 uniform sampler2D kernelTexture;
 uniform sampler2D iChannel1;
-out vec4 fragColor;
+out vec2 fragColor;
 
 void main()
 {  
@@ -17,10 +17,10 @@ void main()
     ivec2 intMouse = ivec2(iMouse.xy);
     
     vec4 kernel = texture(kernelTexture, uv);
-    vec4 draw = texture(iChannel1, uv);
+    vec2 draw = texture(iChannel1, uv).rg;  // texture only return float or vec4
     
     if (ifragCoord.x == intMouse.x && ifragCoord.y == iResolution.y - intMouse.y)  {
-        draw = vec4(1.,1.,1.,1.);  // white
+        draw = vec2(1.,1.);  // white
     } 
 
     float sum = 0.;
