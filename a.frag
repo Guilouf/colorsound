@@ -5,7 +5,7 @@ Takes a kernel and the current image pixel as input,
 returns a kernel
 */
 uniform vec2  iResolution;
-uniform sampler2D iChannel0;
+uniform sampler2D kernelTexture;
 uniform sampler2D iChannel1;
 out vec4 fragColor;
 
@@ -17,7 +17,7 @@ void main()
 {
 
     vec2 uv = gl_FragCoord.xy / iResolution.xy;
-    vec4 prevK = texture(iChannel0, uv); //previous kernel
+    vec4 prevK = texture(kernelTexture, uv); //previous kernel
     fragColor = prevK;
 
     //previous pixels

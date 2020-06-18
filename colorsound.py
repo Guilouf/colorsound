@@ -58,12 +58,12 @@ class ColorSound:
         self.display_channel_b = glGetUniformLocation(self.display_prog, "iChannel1")
         glUseProgram(self.a_prog)
         glUniform2f(glGetUniformLocation(self.a_prog, 'iResolution'), *self.resolution)
-        self.a_prog_channel_a = glGetUniformLocation(self.a_prog, "iChannel0")
+        self.a_prog_channel_a = glGetUniformLocation(self.a_prog, "kernelTexture")
         self.a_prog_channel_b = glGetUniformLocation(self.a_prog, "iChannel1")
         glUseProgram(self.b_prog)
         glUniform2f(glGetUniformLocation(self.b_prog, 'iResolution'), *self.resolution)
         self.uni_mouse = glGetUniformLocation(self.b_prog, 'iMouse')
-        self.b_prog_channel_a = glGetUniformLocation(self.b_prog, "iChannel0")
+        self.b_prog_channel_a = glGetUniformLocation(self.b_prog, "kernelTexture")
         self.b_prog_channel_b = glGetUniformLocation(self.b_prog, "iChannel1")
 
         ##################

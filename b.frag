@@ -6,7 +6,7 @@ returns a new image
 */
 uniform vec2  iMouse;
 uniform vec2  iResolution;
-uniform sampler2D iChannel0;
+uniform sampler2D kernelTexture;
 uniform sampler2D iChannel1;
 out vec4 fragColor;
 
@@ -16,7 +16,7 @@ void main()
     ivec2 ifragCoord = ivec2(gl_FragCoord);
     ivec2 intMouse = ivec2(iMouse.xy);
     
-    vec4 kernel = texture(iChannel0, uv);
+    vec4 kernel = texture(kernelTexture, uv);
     vec4 draw = texture(iChannel1, uv);
     
     if (ifragCoord.x == intMouse.x && ifragCoord.y == iResolution.y - intMouse.y)  {
