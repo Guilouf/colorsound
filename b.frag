@@ -4,8 +4,10 @@ Image buffer
 Takes previous image and kernel as input,
 returns a new image
 */
-uniform vec2  iMouse;
-uniform vec2  iResolution;
+uniform vec2 iMouse;
+uniform int iMouseLeftDown;
+uniform int iMouseRightDown;
+uniform vec2 iResolution;
 uniform sampler2D kernelTexture;
 uniform sampler2D iChannel1;
 out vec2 fragColor;
@@ -19,7 +21,8 @@ void main()
     vec4 kernel = texture(kernelTexture, uv);
     vec2 draw = texture(iChannel1, uv).rg;  // texture only return float or vec4
     
-    if (ifragCoord.x == intMouse.x && ifragCoord.y == iResolution.y - intMouse.y)  {
+    if (ifragCoord.x == intMouse.x && ifragCoord.y == iResolution.y - intMouse.y
+        && iMouseLeftDown == 1)  {
         draw = vec2(1.,1.);  // white
     } 
 

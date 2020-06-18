@@ -62,7 +62,9 @@ class ColorSound:
         self.a_prog_channel_b = glGetUniformLocation(self.a_prog, "iChannel1")
         glUseProgram(self.b_prog)
         glUniform2f(glGetUniformLocation(self.b_prog, 'iResolution'), *self.resolution)
-        self.uni_mouse = glGetUniformLocation(self.b_prog, 'iMouse')
+        self.uni_mouse_pos = glGetUniformLocation(self.b_prog, 'iMouse')
+        self.uni_mouse_left_down = glGetUniformLocation(self.b_prog, 'iMouseLeftDown')
+        self.uni_mouse_right_down = glGetUniformLocation(self.b_prog, 'iMouseRightDown')
         self.b_prog_channel_a = glGetUniformLocation(self.b_prog, "kernelTexture")
         self.b_prog_channel_b = glGetUniformLocation(self.b_prog, "iChannel1")
 
@@ -112,15 +114,12 @@ class ColorSound:
         self.clock = pygame.time.Clock()
 
     def mainloop(self):
-
-        mouse_pos = pygame.mouse.get_pos()
-
         while 1:
             self.clock.tick(120)  # cap fps
 
             for event in pygame.event.get():
-                if pygame.mouse.get_pressed()[0]:  # left mouse button pressed
-                    mouse_pos = pygame.mouse.get_pos()
+                mouse_left_down = pygame.mouse.get_pressed()[0]
+                mouse_right_down = pygame.mouse.get_pressed()[2]
                 if (event.type == QUIT) or (event.type == KEYUP and event.key == K_ESCAPE):
                     pygame.quit()
                     exitsystem()
@@ -135,7 +134,9 @@ class ColorSound:
             glUseProgram(self.b_prog)
             glUniform1i(self.b_prog_channel_a, self.texture_a)
             glUniform1i(self.b_prog_channel_b, self.texture_b)
-            glUniform2f(self.uni_mouse, *mouse_pos)
+            glUniform1i(self.uni_mouse_left_down, mouse_left_down)
+            glUniform1i(self.uni_mouse_right_down, mouse_right_down)
+            glUniform2f(self.uni_mouse_pos, *pygame.mouse.get_pos())
             glDrawArrays(GL_QUADS, 0, 4)
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
