@@ -112,10 +112,15 @@ class ColorSound:
         self.clock = pygame.time.Clock()
 
     def mainloop(self):
+
+        mouse_pos = pygame.mouse.get_pos()
+
         while 1:
             self.clock.tick(120)  # cap fps
 
             for event in pygame.event.get():
+                if pygame.mouse.get_pressed()[0]:  # left mouse button pressed
+                    mouse_pos = pygame.mouse.get_pos()
                 if (event.type == QUIT) or (event.type == KEYUP and event.key == K_ESCAPE):
                     pygame.quit()
                     exitsystem()
@@ -130,7 +135,7 @@ class ColorSound:
             glUseProgram(self.b_prog)
             glUniform1i(self.b_prog_channel_a, self.texture_a)
             glUniform1i(self.b_prog_channel_b, self.texture_b)
-            glUniform2f(self.uni_mouse, *pygame.mouse.get_pos())
+            glUniform2f(self.uni_mouse, *mouse_pos)
             glDrawArrays(GL_QUADS, 0, 4)
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
