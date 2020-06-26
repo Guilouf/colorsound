@@ -21,9 +21,12 @@ void main()
     vec4 kernel = texture(kernelTexture, uv);
     vec2 draw = texture(iChannel1, uv).rg;  // texture only return float or vec4
     
-    if (ifragCoord.x == intMouse.x && ifragCoord.y == iResolution.y - intMouse.y
-        && iMouseLeftDown == 1)  {
-        draw = vec2(1.,1.);  // white
+    if (ifragCoord.x == intMouse.x && ifragCoord.y == iResolution.y - intMouse.y)  {
+        if (iMouseLeftDown == 1)  {
+            draw = vec2(1.,0.);  // white
+        } else if (iMouseRightDown == 1) {
+            draw = vec2(0.,1.);
+        }
     } 
 
     float sum = 0.;
