@@ -12,6 +12,8 @@ uniform sampler2D kernelTexture;
 uniform sampler2D iChannel1;
 out vec2 fragColor;
 
+uniform int brush = 5;  // size of wall painting
+
 void main()
 {  
 	vec2 uv = gl_FragCoord.xy / iResolution.xy;
@@ -21,13 +23,17 @@ void main()
     vec4 kernel = texture(kernelTexture, uv);
     vec2 draw = texture(iChannel1, uv).rg;  // texture only return float or vec4
     
-    if (ifragCoord.x == intMouse.x && ifragCoord.y == iResolution.y - intMouse.y)  {
-        if (iMouseLeftDown == 1)  {
-            draw = vec2(1.,0.);  // white
-        } else if (iMouseRightDown == 1) {
-            draw = vec2(0.,1.);
-        }
-    } 
+    if (ifragCoord.x == intMouse.x && ifragCoord.y == iResolution.y - intMouse.y
+    && iMouseLeftDown == 1)  {
+        draw = vec2(1.,0.);  // white
+    }
+
+    // wall painting, with 'zone effect'
+    if (ifragCoord.x  <= intMouse.x + brush && ifragCoord.x >= intMouse.x - brush
+    && ifragCoord.y <= iResolution.y - intMouse.y + brush && ifragCoord.y >= iResolution.y - intMouse.y - brush
+    && iMouseRightDown == 1) {
+        draw = vec2(0.,1.);
+    }
 
     float sum = 0.;
     
