@@ -32,6 +32,7 @@ class ColorSound:
 
     def __init__(self):
         pygame.init()
+        self.frame_counter = 0
         self.resolution = 1920, 1080
         # self.resolution = 3840, 2160
         pygame.display.set_mode(self.resolution, DOUBLEBUF | OPENGL)
@@ -113,8 +114,14 @@ class ColorSound:
 
         self.clock = pygame.time.Clock()
 
+    def debug_texture_sum(self, color_chanel):
+        """Convert pixel area of current binded framebuffer texture to numpy array"""
+        pixels = glReadPixels(0, 0, *self.resolution, GL_RGBA, GL_FLOAT)
+        return pixels[:, :, color_chanel].sum()
+
     def mainloop(self):
         while 1:
+            self.frame_counter += 1
             self.clock.tick(120)  # cap fps
 
             for event in pygame.event.get():
@@ -138,6 +145,9 @@ class ColorSound:
             glUniform1i(self.uni_mouse_right_down, mouse_right_down)
             glUniform2f(self.uni_mouse_pos, *pygame.mouse.get_pos())
             glDrawArrays(GL_QUADS, 0, 4)
+
+            if self.frame_counter % 60 == 0:
+                print(self.debug_texture_sum(0))
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
             glUseProgram(self.display_prog)
