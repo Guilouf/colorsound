@@ -117,7 +117,7 @@ class ColorSound:
     def debug_texture_sum(self, color_chanel):
         """Convert pixel area of current binded framebuffer texture to numpy array"""
         pixels = glReadPixels(0, 0, *self.resolution, GL_RGBA, GL_FLOAT)
-        return pixels[:, :, color_chanel].sum()
+        return pixels[:, :, color_chanel][:, :, 1 > 0.99].sum()
 
     def mainloop(self):
         while 1:
