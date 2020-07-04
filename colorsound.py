@@ -32,6 +32,7 @@ class ColorSound:
 
     def __init__(self):
         pygame.init()
+        self.frame_counter = 0
         self.resolution = 1920, 1080
         # self.resolution = 3840, 2160
         pygame.display.set_mode(self.resolution, DOUBLEBUF | OPENGL)
@@ -58,12 +59,14 @@ class ColorSound:
         self.display_channel_b = glGetUniformLocation(self.display_prog, "iChannel1")
         glUseProgram(self.a_prog)
         glUniform2f(glGetUniformLocation(self.a_prog, 'iResolution'), *self.resolution)
-        self.a_prog_channel_a = glGetUniformLocation(self.a_prog, "iChannel0")
+        self.a_prog_channel_a = glGetUniformLocation(self.a_prog, "kernelTexture")
         self.a_prog_channel_b = glGetUniformLocation(self.a_prog, "iChannel1")
         glUseProgram(self.b_prog)
         glUniform2f(glGetUniformLocation(self.b_prog, 'iResolution'), *self.resolution)
-        self.uni_mouse = glGetUniformLocation(self.b_prog, 'iMouse')
-        self.b_prog_channel_a = glGetUniformLocation(self.b_prog, "iChannel0")
+        self.uni_mouse_pos = glGetUniformLocation(self.b_prog, 'iMouse')
+        self.uni_mouse_left_down = glGetUniformLocation(self.b_prog, 'iMouseLeftDown')
+        self.uni_mouse_right_down = glGetUniformLocation(self.b_prog, 'iMouseRightDown')
+        self.b_prog_channel_a = glGetUniformLocation(self.b_prog, "kernelTexture")
         self.b_prog_channel_b = glGetUniformLocation(self.b_prog, "iChannel1")
 
         ##################
@@ -101,7 +104,7 @@ class ColorSound:
         self.texture_b = glGenTextures(1)
         glActiveTexture(GL_TEXTURE2)
         glBindTexture(GL_TEXTURE_2D, self.texture_b)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, *self.resolution, 0, GL_RGBA, GL_BYTE, None)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RG32F, *self.resolution, 0, GL_RG, GL_BYTE, None)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 
@@ -111,11 +114,19 @@ class ColorSound:
 
         self.clock = pygame.time.Clock()
 
+    def debug_texture_sum(self, color_chanel):
+        """Convert pixel area of current binded framebuffer texture to numpy array"""
+        pixels = glReadPixels(0, 0, *self.resolution, GL_RGBA, GL_FLOAT)
+        return pixels[:, :, color_chanel][:, :, 1 > 0.99].sum()
+
     def mainloop(self):
         while 1:
+            self.frame_counter += 1
             self.clock.tick(120)  # cap fps
 
             for event in pygame.event.get():
+                mouse_left_down = pygame.mouse.get_pressed()[0]
+                mouse_right_down = pygame.mouse.get_pressed()[2]
                 if (event.type == QUIT) or (event.type == KEYUP and event.key == K_ESCAPE):
                     pygame.quit()
                     exitsystem()
@@ -130,8 +141,13 @@ class ColorSound:
             glUseProgram(self.b_prog)
             glUniform1i(self.b_prog_channel_a, self.texture_a)
             glUniform1i(self.b_prog_channel_b, self.texture_b)
-            glUniform2f(self.uni_mouse, *pygame.mouse.get_pos())
+            glUniform1i(self.uni_mouse_left_down, mouse_left_down)
+            glUniform1i(self.uni_mouse_right_down, mouse_right_down)
+            glUniform2f(self.uni_mouse_pos, *pygame.mouse.get_pos())
             glDrawArrays(GL_QUADS, 0, 4)
+
+            # if self.frame_counter % 60 == 0:
+            #     print(self.debug_texture_sum(0))
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
             glUseProgram(self.display_prog)

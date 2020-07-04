@@ -9,4 +9,5 @@ in python + openGL
 >  If troubles in Linux, `sudo apt install python3-pygame`
 
 ## Usage
-Just over the window with your mouse !
+Just over the window with your mouse,
+ right click to add waves and left click to add walls.
