@@ -31,14 +31,13 @@ void main()
     vec4 down = texture(iChannel1, move(uv, vec2(0,1)));
     vec4 up = texture(iChannel1, move(uv, vec2(0,-1)));
 
-    left.r = floatEq(left.g, 0.) ? left.r : center.r;
-    right.r = floatEq(right.g, 0.) ? right.r : center.r;
-    down.r = floatEq(down.g, 0.) ? down.r : center.r;
-    up.r = floatEq(up.g, 0.) ? up.r : center.r;
+    // nearby walls to 0
+    fragColor.a += floatEq(left.g, 0.) ? (center.r - left.r) : 0;
+    fragColor.r += floatEq(right.g, 0.) ? (center.r - right.r) : 0;
+    fragColor.g += floatEq(up.g, 0.) ? (center.r - up.r) : 0;
+    fragColor.b += floatEq(down.g, 0.) ? (center.r - down.r) : 0;
 
-    fragColor.a += (center.r - left.r);
-    fragColor.r += (center.r - right.r);
-    fragColor.g += (center.r - up.r);
-    fragColor.b += (center.r - down.r);
+    // if it's a wall, do nothing
+    fragColor = floatEq(center.g, 0.) ? fragColor : prevK;
 
 }
