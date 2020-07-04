@@ -146,8 +146,8 @@ class ColorSound:
             glUniform2f(self.uni_mouse_pos, *pygame.mouse.get_pos())
             glDrawArrays(GL_QUADS, 0, 4)
 
-            if self.frame_counter % 60 == 0:
-                print(self.debug_texture_sum(0))
+            # if self.frame_counter % 60 == 0:
+            #     print(self.debug_texture_sum(0))
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0)
             glUseProgram(self.display_prog)
